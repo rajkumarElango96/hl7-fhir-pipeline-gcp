@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "main": "index.js",
+  "main": "simulator.js",
+  "exports": "./simulator.js",
   "dependencies": {
     "@faker-js/faker": "^9.9.0",
     "@pipeline/common": "*",

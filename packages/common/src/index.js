@@ -8,6 +8,8 @@ export const config = {
   fhirBaseUrl: process.env.FHIR_BASE_URL ?? 'http://localhost:8080/fhir',
   mllpHost: process.env.MLLP_HOST ?? 'localhost',
   mllpPort: Number(process.env.MLLP_PORT ?? 2575),
+  writerControlPort: Number(process.env.WRITER_CONTROL_PORT ?? 7104),
+  opsApiPort: Number(process.env.OPS_API_PORT ?? 4000),
 };
 
 export const TOPICS = {

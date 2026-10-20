@@ -10,7 +10,7 @@ hl7-simulator ──MLLP/TCP──► mllp-gateway ──► [hl7.raw]
                                                                              │   │
                                                          [fhir.retry.*] ◄────┘   └──► [fhir.events]
                                                                                           │
-                                                         ops-api (+ Postgres) ◄── all topics ──► dashboard (WebSocket)
+                                                         ops-api (+ SQLite)   ◄── all topics ──► dashboard (WebSocket)
 ```
 The message backbone is **Apache Kafka** (Redpanda was the first plan, but it has no native macOS build).
 Each box is its own container and Node process. Stages talk only through topics.
@@ -22,8 +22,8 @@ Each box is its own container and Node process. Stages talk only through topics.
 | **mllp-gateway** | TCP MLLP listener. Publishes the raw message to `hl7.raw`, keyed by the PID-3 MRN. Replies with ACK `AA` **only after Kafka acknowledges the write**, so delivery is durable and at-least-once. Replies `AE`/`AR` on framing or ID errors. |
 | **parser-validator** | Parses HL7v2 (segments, fields, components, repetitions, escape sequences) and checks the required segments for each trigger event. Valid → `hl7.parsed`; invalid → `hl7.dlq` with a reason. |
 | **fhir-mapper** | Pure functions that turn ADT into a FHIR transaction Bundle (Patient, Encounter, and Location/Practitioner as needed). Uses business identifiers so writes can be conditional. |
-| **fhir-writer** | Posts bundles to HAPI. Stays idempotent by using conditional PUT on identifiers. Retries with exponential backoff through `fhir.retry.*` topics, then sends to the DLQ. Pauses its consumer while HAPI is down (backpressure). Emits domain events (`patient.admitted`, `patient.discharged`, …) to `fhir.events`. |
-| **ops-api** | Fastify + Postgres. Tracks each message's lifecycle by MSH-10. Lists and replays DLQ messages, reports consumer lag, and pushes a live WebSocket feed. |
+| **fhir-writer** | Posts bundles to HAPI. Has a control port (:7104) for chaos: pause, simulated outage. Stays idempotent by using conditional PUT on identifiers. Retries with exponential backoff through `fhir.retry.*` topics, then sends to the DLQ. Pauses its consumer while HAPI is down (backpressure). Emits domain events (`patient.admitted`, `patient.discharged`, …) to `fhir.events`. |
+| **ops-api** | Fastify + SQLite (`node:sqlite`) read model built from Kafka. Tracks each message's lifecycle by MSH-10. Lists and replays DLQ messages, reports consumer lag, and pushes a live WebSocket feed. |
 | **dashboard** | React + Vite. Shows the live pipeline, a message detail view (raw HL7 next to the FHIR JSON) and DLQ replay. Has chaos toggles (stop the writer, take HAPI down) to demo recovery. |
 
 ## Topics

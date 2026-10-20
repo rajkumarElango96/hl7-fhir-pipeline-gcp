@@ -1,7 +1,9 @@
 // Summarise what landed in HAPI: patient/encounter counts plus a few recent patients.
 import { config } from '@pipeline/common';
 
-const get = async (path) => (await fetch(`${config.fhirBaseUrl}/${path}`, { headers: { Accept: 'application/fhir+json' } })).json();
+// no-cache: HAPI otherwise reuses search results for up to a minute.
+const get = async (path) =>
+  (await fetch(`${config.fhirBaseUrl}/${path}`, { headers: { Accept: 'application/fhir+json', 'Cache-Control': 'no-cache' } })).json();
 
 const [patients, encounters, finished] = await Promise.all([
   get('Patient?_summary=count'),
