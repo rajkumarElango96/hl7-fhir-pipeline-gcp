@@ -1,0 +1,11 @@
+{
+  "name": "@pipeline/fhir-mapper",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "@pipeline/common": "*",
+    "@pipeline/fhir-mapping": "*"
+  }
+}
