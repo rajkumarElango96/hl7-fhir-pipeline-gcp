@@ -1,13 +1,12 @@
 {
-  "name": "@pipeline/hl7-simulator",
+  "name": "@pipeline/synthetic",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "main": "simulator.js",
-  "exports": "./simulator.js",
+  "main": "generator.js",
+  "exports": "./generator.js",
   "dependencies": {
     "@faker-js/faker": "^9.9.0",
-    "@pipeline/common": "*",
     "@pipeline/hl7": "*"
   }
 }

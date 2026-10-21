@@ -15,7 +15,12 @@ export function validateAdt(msg) {
   if (!get(msg, 'MSH-10')) errors.push('MSH-10 (message control ID) is required');
   if (!get(msg, 'MSH-7')) errors.push('MSH-7 (message timestamp) is required');
   if (!getSegment(msg, 'PID')) errors.push('PID segment is required');
-  else if (!findMrn(msg)) errors.push('PID-3 must contain an MR identifier');
+  else {
+    if (!findMrn(msg)) errors.push('PID-3 must contain an MR identifier');
+    if (!get(msg, 'PID-5.1')) errors.push('PID-5.1 (family name) is required');
+    if (!/^\d{8}/.test(get(msg, 'PID-7'))) errors.push('PID-7 (date of birth) is required as YYYYMMDD');
+    if (!['M', 'F', 'O', 'U'].includes(get(msg, 'PID-8'))) errors.push('PID-8 (sex) must be M, F, O or U');
+  }
   if (['A01', 'A03'].includes(trigger)) {
     if (!getSegment(msg, 'PV1')) errors.push(`PV1 segment is required for ${trigger}`);
     else if (!get(msg, 'PV1-19')) errors.push('PV1-19 (visit number) is required');

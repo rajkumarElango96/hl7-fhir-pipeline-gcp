@@ -1,6 +1,5 @@
 node_modules/
-dist/
-.local/
+data/adt-*.hl7
 *.log
 .DS_Store
 .claude/settings.local.json

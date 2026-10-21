@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="960" viewBox="0 0 1700 960" font-family="Helvetica Neue, Helvetica, Arial, sans-serif">
+<defs>
+  <pattern id="g-small" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20,0 H0 V20" fill="none" stroke="#efefef" stroke-width="1"/></pattern>
+  <pattern id="g-big" width="100" height="100" patternUnits="userSpaceOnUse"><rect width="100" height="100" fill="url(#g-small)"/><path d="M100,0 H0 V100" fill="none" stroke="#e2e2e2" stroke-width="1"/></pattern>
+  <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#2b2f36"/></marker>
+</defs>
+<rect width="1700" height="960" fill="#fff"/><rect width="1700" height="960" fill="url(#g-big)"/>
+<text x="40" y="52" font-size="22" font-weight="700" fill="#2b2f36">HL7v2 → FHIR pipeline (GCP)</text>
+<rect x="55" y="115" width="190" height="90" rx="5" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="150" y="158" font-size="19" fill="#2b2f36" text-anchor="middle">Scheduler</text>
+<text x="150" y="181" font-size="13" fill="#6b7280" text-anchor="middle">Cloud Scheduler</text>
+<rect x="725" y="115" width="230" height="90" rx="5" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="840" y="158" font-size="19" fill="#2b2f36" text-anchor="middle">Orchestrator</text>
+<text x="840" y="181" font-size="13" fill="#6b7280" text-anchor="middle">Cloud Workflows</text>
+<rect x="55" y="355" width="190" height="90" rx="5" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="150" y="398" font-size="19" fill="#2b2f36" text-anchor="middle">Hospital EHR</text>
+<text x="150" y="421" font-size="13" fill="#6b7280" text-anchor="middle">simulator · Cloud Run job</text>
+<path d="M295,345 V455 A85,13 0 0 0 465,455 V345" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<ellipse cx="380" cy="345" rx="85" ry="13" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="380" y="406" font-size="19" fill="#2b2f36" text-anchor="middle">Landing Bucket</text>
+<text x="380" y="429" font-size="13" fill="#6b7280" text-anchor="middle">Cloud Storage</text>
+<rect x="515" y="355" width="190" height="90" rx="5" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="610" y="398" font-size="19" fill="#2b2f36" text-anchor="middle">Loader</text>
+<text x="610" y="421" font-size="13" fill="#6b7280" text-anchor="middle">Cloud Run job</text>
+<path d="M755,345 V455 A85,13 0 0 0 925,455 V345" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<ellipse cx="840" cy="345" rx="85" ry="13" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="840" y="406" font-size="19" fill="#2b2f36" text-anchor="middle">Raw</text>
+<text x="840" y="429" font-size="13" fill="#6b7280" text-anchor="middle">BigQuery</text>
+<rect x="975" y="355" width="190" height="90" rx="5" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="1070" y="398" font-size="19" fill="#2b2f36" text-anchor="middle">Validator</text>
+<text x="1070" y="421" font-size="13" fill="#6b7280" text-anchor="middle">Cloud Run job</text>
+<path d="M1215,345 V455 A85,13 0 0 0 1385,455 V345" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<ellipse cx="1300" cy="345" rx="85" ry="13" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="1300" y="406" font-size="19" fill="#2b2f36" text-anchor="middle">Validated</text>
+<text x="1300" y="429" font-size="13" fill="#6b7280" text-anchor="middle">BigQuery</text>
+<path d="M985,575 V685 A85,13 0 0 0 1155,685 V575" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<ellipse cx="1070" cy="575" rx="85" ry="13" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="1070" y="636" font-size="19" fill="#2b2f36" text-anchor="middle">Rejected</text>
+<text x="1070" y="659" font-size="13" fill="#6b7280" text-anchor="middle">BigQuery</text>
+<path d="M1415,590 H1185 A18,40 0 0 0 1185,670 H1415" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<ellipse cx="1415" cy="630" rx="18" ry="40" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="1292" y="628" font-size="19" fill="#2b2f36" text-anchor="middle">Pub/Sub</text>
+<text x="1292" y="651" font-size="13" fill="#6b7280" text-anchor="middle">ordered by MRN</text>
+<path d="M1655,590 H1465 A18,40 0 0 0 1465,670 H1655" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<ellipse cx="1655" cy="630" rx="18" ry="40" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="1552" y="628" font-size="19" fill="#2b2f36" text-anchor="middle">Dead Letter</text>
+<text x="1552" y="651" font-size="13" fill="#6b7280" text-anchor="middle">Pub/Sub</text>
+<rect x="1190" y="815" width="220" height="90" rx="5" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="1300" y="858" font-size="19" fill="#2b2f36" text-anchor="middle">FHIR Transformer</text>
+<text x="1300" y="881" font-size="13" fill="#6b7280" text-anchor="middle">Cloud Run service</text>
+<path d="M985,805 V915 A85,13 0 0 0 1155,915 V805" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<ellipse cx="1070" cy="805" rx="85" ry="13" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="1070" y="866" font-size="19" fill="#2b2f36" text-anchor="middle">FHIR Store</text>
+<text x="1070" y="889" font-size="13" fill="#6b7280" text-anchor="middle">Healthcare API</text>
+<path d="M755,805 V915 A85,13 0 0 0 925,915 V805" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<ellipse cx="840" cy="805" rx="85" ry="13" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="840" y="866" font-size="19" fill="#2b2f36" text-anchor="middle">Analytics</text>
+<text x="840" y="889" font-size="13" fill="#6b7280" text-anchor="middle">BigQuery</text>
+<rect x="515" y="815" width="190" height="90" rx="5" fill="#fff" stroke="#2b2f36" stroke-width="1.6"/>
+<text x="610" y="858" font-size="19" fill="#2b2f36" text-anchor="middle">Dashboard</text>
+<text x="610" y="881" font-size="13" fill="#6b7280" text-anchor="middle">Looker Studio + D3</text>
+<path d="M150,205 V351" fill="none" stroke="#2b2f36" stroke-width="1.4"  marker-end="url(#arrow)"/>
+<path d="M245,400 H291" fill="none" stroke="#2b2f36" stroke-width="1.4"  marker-end="url(#arrow)"/>
+<text x="268" y="390" font-size="13" fill="#6b7280" font-style="italic" text-anchor="middle">HL7 file</text>
+<path d="M380,343 V160 H721" fill="none" stroke="#2b2f36" stroke-width="1.4"  marker-end="url(#arrow)"/>
+<text x="395" y="250" font-size="13" fill="#6b7280" font-style="italic" text-anchor="start">file landed</text>
+<path d="M465,400 H511" fill="none" stroke="#2b2f36" stroke-width="1.4"  marker-end="url(#arrow)"/>
+<path d="M780,205 V270 H610 V351" fill="none" stroke="#2b2f36" stroke-width="1.4" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<text x="620" y="262" font-size="13" fill="#6b7280" font-style="italic" text-anchor="start">run</text>
+<path d="M900,205 V270 H1070 V351" fill="none" stroke="#2b2f36" stroke-width="1.4" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<text x="1080" y="262" font-size="13" fill="#6b7280" font-style="italic" text-anchor="start">run</text>
+<path d="M705,400 H751" fill="none" stroke="#2b2f36" stroke-width="1.4"  marker-end="url(#arrow)"/>
+<path d="M925,400 H971" fill="none" stroke="#2b2f36" stroke-width="1.4"  marker-end="url(#arrow)"/>
+<path d="M1165,400 H1211" fill="none" stroke="#2b2f36" stroke-width="1.4"  marker-end="url(#arrow)"/>
+<text x="1188" y="390" font-size="13" fill="#6b7280" font-style="italic" text-anchor="middle">valid</text>
+<path d="M1070,445 V561" fill="none" stroke="#2b2f36" stroke-width="1.4"  marker-end="url(#arrow)"/>
+<text x="1080" y="515" font-size="13" fill="#6b7280" font-style="italic" text-anchor="start">invalid</text>
+<path d="M1300,463 V586" fill="none" stroke="#2b2f36" stroke-width="1.4"  marker-end="url(#arrow)"/>
+<text x="1310" y="530" font-size="13" fill="#6b7280" font-style="italic" text-anchor="start">publish</text>
+<path d="M1433,630 H1461" fill="none" stroke="#2b2f36" stroke-width="1.4" stroke-dasharray="6 5" marker-end="url(#arrow)"/>
+<path d="M1300,670 V811" fill="none" stroke="#2b2f36" stroke-width="1.4"  marker-end="url(#arrow)"/>
+<text x="1310" y="745" font-size="13" fill="#6b7280" font-style="italic" text-anchor="start">push</text>
+<path d="M1190,860 H1159" fill="none" stroke="#2b2f36" stroke-width="1.4"  marker-end="url(#arrow)"/>
+<path d="M985,860 H929" fill="none" stroke="#2b2f36" stroke-width="1.4"  marker-end="url(#arrow)"/>
+<text x="957" y="850" font-size="13" fill="#6b7280" font-style="italic" text-anchor="middle">stream</text>
+<path d="M755,860 H709" fill="none" stroke="#2b2f36" stroke-width="1.4"  marker-end="url(#arrow)"/>
+</svg>

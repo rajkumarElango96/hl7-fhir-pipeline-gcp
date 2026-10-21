@@ -2,25 +2,16 @@
   "name": "pipeline",
   "private": true,
   "type": "module",
-  "description": "HL7v2 ADT -> FHIR R4 integration engine on Kafka (portfolio project, synthetic data only)",
+  "description": "HL7v2 ADT -> FHIR R4 pipeline on Google Cloud (portfolio POC, synthetic data only)",
   "workspaces": [
-    "packages/*",
-    "services/*",
-    "apps/*"
+    "packages/*"
   ],
   "engines": {
     "node": ">=22"
   },
   "scripts": {
     "test": "node --test packages/*/test/*.test.js",
-    "infra:kafka": "kafka-server-start /opt/homebrew/etc/kafka/server.properties",
-    "infra:fhir": "cd .local/hapi-fhir-jpaserver-starter && java -jar target/ROOT.war --spring.datasource.url=jdbc:h2:file:./target/database/h2",
-    "topics": "node scripts/create-topics.js",
-    "dev": "node scripts/dev.js",
-    "simulate": "node services/hl7-simulator/index.js",
-    "check": "node scripts/check-fhir.js"
-  },
-  "allowScripts": {
-    "@confluentinc/kafka-javascript@1.11.0": true
+    "generate": "node packages/synthetic/cli.js",
+    "diagram": "node docs/architecture/build-simple-diagram.mjs"
   }
 }

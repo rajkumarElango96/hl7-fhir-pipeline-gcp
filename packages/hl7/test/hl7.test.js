@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { parseMessage, get, toAdtEvent, validateAdt, buildAck, frame, createDecoder, escape, DEFAULT_DELIMITERS } from '../src/index.js';
+import { parseMessage, get, toAdtEvent, validateAdt, hl7Timestamp, escape, DEFAULT_DELIMITERS } from '../src/index.js';
 import { A01, A03 } from './fixtures.js';
 
 test('parses MSH with spec-aligned field numbers', () => {
@@ -41,17 +41,6 @@ test('validation reports missing PV1-19 and MRN', () => {
   assert.ok(errors.some((e) => e.includes('PV1-19')));
 });
 
-test('ACK echoes the control id', () => {
-  const ack = parseMessage(buildAck(parseMessage(A01), 'AA'));
-  assert.equal(get(ack, 'MSA-1'), 'AA');
-  assert.equal(get(ack, 'MSA-2'), 'MSG0001');
-});
-
-test('MLLP decoder handles split and joined frames', () => {
-  const got = [];
-  const dec = createDecoder((m) => got.push(m));
-  const both = Buffer.concat([frame('one'), frame('two')]);
-  dec.push(both.subarray(0, 4));
-  dec.push(both.subarray(4));
-  assert.deepEqual(got, ['one', 'two']);
+test('hl7Timestamp writes IST time', () => {
+  assert.equal(hl7Timestamp(new Date('2026-10-20T04:55:00Z')), '20261020102500');
 });
