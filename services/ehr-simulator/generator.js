@@ -2,7 +2,11 @@
 // Each patient produces admit (A01) -> update (A08) -> discharge (A03).
 // Malformed messages break one mandatory rule, so the validator should reject them.
 import { fakerEN_IN as faker } from '@faker-js/faker';
-import { escape, hl7Timestamp, TRIGGER_STRUCTURE } from '@pipeline/hl7';
+import { escape, hl7Timestamp } from '@pipeline/hl7';
+
+// HL7 v2.5 message structure per trigger (MSH-9.3). The legacy EHR owns its own copy on purpose:
+// it is an independent system, not part of the pipeline.
+const TRIGGER_STRUCTURE = { A01: 'ADT_A01', A08: 'ADT_A01', A03: 'ADT_A03' };
 
 // Each synthetic hospital and the nearby cities its patients come from.
 // City, state and PIN prefix are consistent; the last three PIN digits are random.

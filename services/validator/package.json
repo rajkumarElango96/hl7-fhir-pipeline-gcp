@@ -1,0 +1,12 @@
+{
+  "name": "@pipeline/validator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Validator service: raw messages -> validated / rejected (Cloud Run job)",
+  "type": "module",
+  "main": "validator.js",
+  "dependencies": {
+    "@pipeline/config": "*",
+    "@pipeline/hl7": "*"
+  }
+}

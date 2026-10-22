@@ -127,7 +127,7 @@ export function planBundle(event, current = {}) {
   const patientDecision = decide(current.patient, event.messageTime);
   let subject;
   if (patientDecision === 'skip') {
-    skipped.push({ resourceType: 'Patient', id: current.patient.id, reason: 'stored version comes from a newer message' });
+    skipped.push({ resourceType: 'Patient', id: current.patient.id, reason: 'stored version is from the same or a newer message' });
     subject = `Patient/${current.patient.id}`;
   } else {
     const e = entryFor(patientResource(event), { type: 'Patient', system: mrnSystem, value: event.patient.mrn, current: current.patient, decision: patientDecision });
@@ -140,7 +140,7 @@ export function planBundle(event, current = {}) {
     const visitSystem = identifierSystem(event.sendingFacility, 'visit');
     const encounterDecision = decide(current.encounter, event.messageTime);
     if (encounterDecision === 'skip') {
-      skipped.push({ resourceType: 'Encounter', id: current.encounter.id, reason: 'stored version comes from a newer message' });
+      skipped.push({ resourceType: 'Encounter', id: current.encounter.id, reason: 'stored version is from the same or a newer message' });
     } else {
       entry.push(entryFor(encounterResource(event, subject), {
         type: 'Encounter', system: visitSystem, value: event.visit.visitNumber, current: current.encounter, decision: encounterDecision,

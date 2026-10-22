@@ -1,5 +1,5 @@
-// Write a batch file of synthetic HL7v2 ADT messages.
-// Usage: npm run generate -- [--patients 2] [--malformed 1] [--seed 42] [--out data/sample.hl7]
+// EHR simulator service (the "legacy hospital system"): writes a batch file of HL7v2 ADT messages.
+// Usage: npm run simulate -- [--patients 2] [--malformed 1] [--seed 42] [--out data/sample.hl7]
 // POC limit: at most 15 patients (45 messages) and 5 malformed per batch.
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';

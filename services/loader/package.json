@@ -2,9 +2,9 @@
   "name": "@pipeline/loader",
   "version": "0.1.0",
   "private": true,
+  "description": "Loader service: batch file -> raw messages (Cloud Run job)",
   "type": "module",
-  "main": "index.js",
-  "exports": "./index.js",
+  "main": "loader.js",
   "dependencies": {
     "@pipeline/config": "*",
     "@pipeline/hl7": "*"

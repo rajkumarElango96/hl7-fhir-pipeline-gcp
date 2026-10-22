@@ -4,15 +4,17 @@
   "type": "module",
   "description": "HL7v2 ADT -> FHIR R4 pipeline on Google Cloud (portfolio POC, synthetic data only)",
   "workspaces": [
-    "packages/*"
+    "lib/*",
+    "services/*"
   ],
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "test": "node --test packages/*/test/*.test.js",
-    "generate": "node packages/synthetic/cli.js",
-    "prepare-raw": "node packages/loader/cli.js",
+    "simulate": "node services/ehr-simulator/main.js",
+    "load": "node services/loader/main.js",
+    "validate": "node services/validator/main.js",
+    "transform": "node services/fhir-transformer/main.js",
     "diagram": "node docs/architecture/build-simple-diagram.mjs"
   }
 }
