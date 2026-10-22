@@ -1,5 +1,7 @@
 node_modules/
+.env
 data/adt-*.hl7
+data/*.ndjson
 *.log
 .DS_Store
 .claude/settings.local.json
