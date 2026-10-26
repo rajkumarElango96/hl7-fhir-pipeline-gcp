@@ -1,9 +1,30 @@
+# Dependencies
 node_modules/
+
+# Local settings and secrets: real values live only on your machine
 .env
+.env.*
+!.env.example
+
+# Google Cloud credentials: never commit a service-account key
+*.pem
+*-key.json
+*credentials*.json
+service-account*.json
+
+# Generated or scratch files
 data/adt-*.hl7
 data/*.ndjson
 *.log
+*.bak
+*.old
+*.tmp
+coverage/
+
+# OS and editor files
 .DS_Store
+.vscode/
+.idea/
 
 # Claude Code
 .claude/
