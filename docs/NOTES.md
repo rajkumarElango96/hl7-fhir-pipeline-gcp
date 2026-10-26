@@ -9,7 +9,7 @@ weekly patient flow.
 250 messages; at most 50 rows on the dashboard). The components and their
 wiring are the ones you would use at scale. All data is synthetic.
 
-Design notes: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
+Design notes: [docs/ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Results (deployed on GCP, October 2026)
 
