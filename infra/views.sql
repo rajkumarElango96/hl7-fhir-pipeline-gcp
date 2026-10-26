@@ -80,26 +80,69 @@ FROM events
 GROUP BY day, hospital, class;
 
 -- ---------------------------------------------------------------------------
--- Message journey: one row per HL7 message and what happened to it, end to end.
--- Filter by control_id (MSH-10) or MRN in Looker Studio to follow one message.
+-- Message journey: one readable row per HL7 message and what happened to it.
+-- Fields are read from the stored message itself, so rejected messages show too.
+-- created_at = MSH-7 (when the hospital produced it), received_at = when it was parsed.
 -- ---------------------------------------------------------------------------
 CREATE OR REPLACE VIEW quality.message_journey AS
+WITH segs AS (
+  SELECT
+    raw.message_hash, raw.file_name, raw.loaded_at, raw.message,
+    (SELECT s FROM UNNEST(SPLIT(raw.message, '\r')) s WHERE STARTS_WITH(s, 'MSH|') LIMIT 1) AS msh,
+    (SELECT s FROM UNNEST(SPLIT(raw.message, '\r')) s WHERE STARTS_WITH(s, 'PID|') LIMIT 1) AS pid,
+    (SELECT s FROM UNNEST(SPLIT(raw.message, '\r')) s WHERE STARTS_WITH(s, 'PV1|') LIMIT 1) AS pv1
+  FROM raw.adt_messages raw
+),
+fields AS (
+  SELECT *,
+    SPLIT(msh, '|')[SAFE_OFFSET(3)]                       AS hospital,       -- MSH-4
+    SPLIT(msh, '|')[SAFE_OFFSET(6)]                       AS msh7,           -- MSH-7
+    SPLIT(SPLIT(msh, '|')[SAFE_OFFSET(8)], '^')[SAFE_OFFSET(1)] AS trigger,  -- MSH-9.2
+    SPLIT(msh, '|')[SAFE_OFFSET(9)]                       AS control_id,     -- MSH-10
+    SPLIT(pid, '|')[SAFE_OFFSET(5)]                       AS pid5,           -- PID-5 family^given
+    SPLIT(pv1, '|')[SAFE_OFFSET(2)]                       AS pv1_class,      -- PV1-2
+    SPLIT(SPLIT(pv1, '|')[SAFE_OFFSET(3)], '^')[SAFE_OFFSET(0)] AS ward,     -- PV1-3.1
+    SPLIT(pv1, '|')[SAFE_OFFSET(10)]                      AS service,        -- PV1-10
+    SPLIT(pv1, '|')[SAFE_OFFSET(19)]                      AS visit_number    -- PV1-19
+  FROM segs
+)
 SELECT
-  raw.loaded_at,
-  raw.file_name,
-  COALESCE(v.control_id, r.control_id)        AS control_id,
-  COALESCE(v.trigger_event, r.trigger_event)  AS trigger_event,
-  COALESCE(v.mrn, r.mrn)                      AS mrn,
-  v.message_time,
+  f.received_at,
+  f.created_at,
+  f.patient,
+  COALESCE(v.mrn, r.mrn)                                  AS mrn,
+  f.event,
+  f.patient_class,
+  f.department,
+  f.hospital,
+  f.visit_number,
+  f.control_id,
   CASE
-    WHEN r.message_hash IS NOT NULL THEN 'rejected'
-    WHEN f.status IS NOT NULL        THEN CONCAT('fhir_', f.status)
-    WHEN v.message_hash IS NOT NULL  THEN 'validated'
-    ELSE 'parsed'
-  END                                         AS outcome,
-  COALESCE(r.reason, f.detail)                AS detail,
-  REPLACE(raw.message, '\r', '\n')            AS hl7
-FROM raw.adt_messages raw
-LEFT JOIN quality.adt_validated v USING (message_hash)
-LEFT JOIN quality.adt_rejected  r USING (message_hash)
-LEFT JOIN quality.fhir_results  f USING (message_hash);
+    WHEN r.message_hash IS NOT NULL THEN 'Rejected'
+    WHEN fr.status = 'sent'         THEN 'Written to FHIR'
+    WHEN fr.status = 'skipped'      THEN 'Skipped (older than stored)'
+    WHEN fr.status = 'failed'       THEN 'FHIR write failed'
+    WHEN v.message_hash IS NOT NULL THEN 'Validated'
+    ELSE 'Parsed'
+  END                                                     AS outcome,
+  COALESCE(r.reason, fr.detail)                           AS detail,
+  f.file_name,
+  REPLACE(f.message, '\r', '\n')                          AS hl7
+FROM (
+  SELECT *,
+    loaded_at AS received_at,
+    COALESCE(SAFE.PARSE_TIMESTAMP('%Y%m%d%H%M%S%z', msh7),
+             SAFE.PARSE_TIMESTAMP('%Y%m%d%H%M%S%z', CONCAT(SUBSTR(msh7, 1, 14), '+0530'))) AS created_at,
+    TRIM(CONCAT(IFNULL(SPLIT(pid5, '^')[SAFE_OFFSET(1)], ''), ' ', IFNULL(SPLIT(pid5, '^')[SAFE_OFFSET(0)], ''))) AS patient,
+    CASE trigger WHEN 'A01' THEN 'Admit' WHEN 'A08' THEN 'Update' WHEN 'A03' THEN 'Discharge' ELSE trigger END AS event,
+    CASE pv1_class WHEN 'I' THEN 'Inpatient' WHEN 'E' THEN 'Emergency' WHEN 'O' THEN 'Outpatient' ELSE pv1_class END AS patient_class,
+    CASE service
+      WHEN 'MED' THEN 'General Medicine' WHEN 'SUR' THEN 'General Surgery' WHEN 'CAR' THEN 'Cardiology'
+      WHEN 'ORT' THEN 'Orthopaedics'     WHEN 'PED' THEN 'Paediatrics'     WHEN 'OBS' THEN 'Obstetrics'
+      WHEN 'EMR' THEN 'Emergency'        ELSE NULLIF(CONCAT(IFNULL(service, ''), ' ', IFNULL(ward, '')), ' ')
+    END AS department
+  FROM fields
+) f
+LEFT JOIN quality.adt_validated v  USING (message_hash)
+LEFT JOIN quality.adt_rejected  r  USING (message_hash)
+LEFT JOIN quality.fhir_results  fr USING (message_hash);
