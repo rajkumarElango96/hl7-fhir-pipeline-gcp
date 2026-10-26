@@ -89,9 +89,11 @@ async function main() {
     })
   }
 
-  // Latest outcome per message wins, so a successful re-run replaces an earlier failure
+  // A re-run replaces only earlier failures. A message already written stays 'sent', even
+  // though the re-run (correctly) skips it as already stored.
   await ensureTable(BQ_QUALITY_DATASET, FHIR_RESULTS_TABLE, RESULTS_SCHEMA)
-  await mergeRows(BQ_QUALITY_DATASET, FHIR_RESULTS_TABLE, RESULTS_SCHEMA, results, 'message_hash', { update: true })
+  await mergeRows(BQ_QUALITY_DATASET, FHIR_RESULTS_TABLE, RESULTS_SCHEMA, results, 'message_hash',
+    { updateWhen: "T.status = 'failed'" })
 
   const count  = status => results.filter(r => r.status === status).length
   const failed = count('failed')
