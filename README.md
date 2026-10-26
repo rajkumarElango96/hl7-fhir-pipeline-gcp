@@ -155,5 +155,3 @@ gcloud workflows executions list hl7-pipeline --location=asia-south1 --limit=3
 bq query --use_legacy_sql=false < infra/views.sql     # once, after the first file
 bq query --use_legacy_sql=false 'SELECT * FROM quality.pipeline_health'
 ```
-
-Design notes and deployment findings: [docs/NOTES.md](docs/NOTES.md).

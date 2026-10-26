@@ -29,3 +29,6 @@ coverage/
 # Claude Code
 .claude/
 CLAUDE.md
+
+# Personal notes
+docs/NOTES.md
