@@ -1,9 +1,6 @@
 # Architecture
 
-![Pipeline flow](architecture/pipeline-flow.png)
-
-> The diagram still shows the EHR simulator on Cloud Scheduler and Pub/Sub in phase 1;
-> regenerate it to match the flow below.
+The diagram is in the [README](../README.md#workflow-at-service-level).
 
 ## Flow (phase 1)
 1. **Hospital EHR** (a separate system, outside GCP) uploads HL7v2 ADT batch files to the landing

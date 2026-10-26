@@ -9,8 +9,6 @@ weekly patient flow.
 250 messages; at most 50 rows on the dashboard). The components and their
 wiring are the ones you would use at scale. All data is synthetic.
 
-![Pipeline flow on GCP](docs/architecture/pipeline-flow.png)
-
 Design notes: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md).
 
 ## Results (deployed on GCP, October 2026)
@@ -181,13 +179,12 @@ flow (`analytics.daily_flow`, `analytics.encounters_current`) and a message expl
 
 ## Deploy
 
-GCP setup done once (by hand or in Cloud Shell): APIs, landing bucket, BigQuery datasets `raw` and
-`quality` (plus `analytics` for streaming), the FHIR store with update-create and streaming, and the
-`hl7-pipeline` service account with BigQuery, Storage (read the landing bucket), Healthcare (FHIR
-resource editor), Eventarc receiver and log writer roles.
+Needs a GCP project with billing, `gcloud` (signed in as a project owner) and Node 22.
 
 ```bash
-PROJECT=hl7-fhir-pipeline BUCKET=<landing-bucket> FHIR_STORE=<store-id> ./infra/deploy.sh
+npm install
+PROJECT=<project-id> ./infra/setup.sh      # once: bucket, datasets, FHIR store, service accounts
+PROJECT=<project-id> BUCKET=<project-id>-landing HC_DATASET=hl7-fhir FHIR_STORE=fhir-r4 ./infra/deploy.sh
 bq query --use_legacy_sql=false < infra/views.sql
 ```
 

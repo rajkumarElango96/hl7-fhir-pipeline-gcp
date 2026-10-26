@@ -9,8 +9,7 @@
   "scripts": {
     "parser": "node services/parser/index.js",
     "validator": "node services/validator/index.js",
-    "transformer": "node services/transformer/index.js",
-    "diagram": "node docs/architecture/build-simple-diagram.mjs"
+    "transformer": "node services/transformer/index.js"
   },
   "dependencies": {
     "@google-cloud/bigquery": "^7.9.4",
