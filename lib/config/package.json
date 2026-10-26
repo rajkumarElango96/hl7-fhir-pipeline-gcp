@@ -1,9 +1,0 @@
-{
-  "name": "@pipeline/config",
-  "version": "0.1.0",
-  "private": true,
-  "description": "GCP resource names from environment variables / .env",
-  "type": "module",
-  "main": "index.js",
-  "exports": "./index.js"
-}

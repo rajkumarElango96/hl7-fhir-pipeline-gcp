@@ -1,9 +1,0 @@
-{
-  "name": "@pipeline/hl7",
-  "version": "0.1.0",
-  "private": true,
-  "description": "Shared HL7v2 helpers: parser, batch splitter, field readers, timestamps",
-  "type": "module",
-  "main": "index.js",
-  "exports": "./index.js"
-}

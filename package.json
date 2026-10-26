@@ -1,20 +1,20 @@
 {
-  "name": "pipeline",
+  "name": "hl7-fhir-pipeline",
+  "version": "1.0.0",
   "private": true,
-  "type": "module",
-  "description": "HL7v2 ADT -> FHIR R4 pipeline on Google Cloud (portfolio POC, synthetic data only)",
-  "workspaces": [
-    "lib/*",
-    "services/*"
-  ],
+  "description": "HL7v2 ADT -> FHIR R4 pipeline on Google Cloud (portfolio PoC, synthetic data only)",
   "engines": {
     "node": ">=22"
   },
   "scripts": {
-    "simulate": "node services/ehr-simulator/main.js",
-    "load": "node services/loader/main.js",
-    "validate": "node services/validator/main.js",
-    "transform": "node services/fhir-transformer/main.js",
+    "parser": "node services/parser/index.js",
+    "validator": "node services/validator/index.js",
+    "transformer": "node services/transformer/index.js",
     "diagram": "node docs/architecture/build-simple-diagram.mjs"
+  },
+  "dependencies": {
+    "@google-cloud/bigquery": "^7.9.4",
+    "@google-cloud/storage": "^7.14.0",
+    "google-auth-library": "^9.15.1"
   }
 }
