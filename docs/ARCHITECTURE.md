@@ -1,6 +1,6 @@
 # Architecture
 
-The diagram is in the [README](../README.md#workflow-at-service-level).
+![Architecture](architecture.png)
 
 ## Flow (phase 1)
 1. **Hospital EHR** (a separate system, outside GCP) uploads HL7v2 ADT batch files to the landing
