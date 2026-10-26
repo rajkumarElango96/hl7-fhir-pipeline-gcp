@@ -4,4 +4,7 @@ data/adt-*.hl7
 data/*.ndjson
 *.log
 .DS_Store
-.claude/settings.local.json
+
+# Claude Code
+.claude/
+CLAUDE.md
